@@ -17,7 +17,7 @@ export default class ClearAllButton extends Component {
     }
 
     sendDeleteCommandToMongo() {
-        console.log('test')
+        
     }
 
     componentDidMount() {
@@ -34,3 +34,12 @@ export default class ClearAllButton extends Component {
         )
     }
 }
+
+
+// db.todos.insertOne(
+//     { "todo_description" : "canvas",
+//       "todo_responsible" : "aaaa",
+//       "todo_priority" : "Medium",
+//       "todo_completed" : "false"
+//     }
+//  )
