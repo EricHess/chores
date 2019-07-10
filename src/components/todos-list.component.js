@@ -32,14 +32,16 @@ export default class TodosList extends Component {
             })
     }
 
-    componentDidUpdate() {
-        axios.get('http://3.17.85.124:4000/todos/')
-        .then(response => {
-            this.setState({todos: response.data});
-        })
-        .catch(function (error) {
-            console.log(error);
-        })   
+    componentDidUpdate(prevProp, prevState) {
+        if(JSON.stringify(prevState.todos) !== JSON.stringify(this.state.todos)){
+            axios.get('http://3.17.85.124:4000/todos/')
+            .then(response => {
+                this.setState({todos: response.data});
+            })
+            .catch(function (error) {
+                console.log(error);
+            })   
+        }
     }
 
     todoList() {
