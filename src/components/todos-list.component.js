@@ -21,7 +21,7 @@ const TodoEditor = props => (
         <td className={props.todo.todo_completed ? 'completed' : ''}>{props.todo.todo_responsible}</td>
         <td className={props.todo.todo_completed ? 'completed' : ''}>{props.todo.todo_priority}</td>
         <td>
-            <Link to={"/edit/"+props.todo._id}>Edit</Link>
+            <Link to={props.loginState ? "/edit/"+props.todo._id : "/login"}>{props.loginState ? "Edit" : "Log In"}</Link>
         </td>
     </tr>
 )
@@ -30,7 +30,7 @@ export default class TodosList extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {todos: [], isLoggedIn:false};
+        this.state = {todos: [], isLoggedIn:this.props.loginState};
     }
 
     componentDidMount() {
@@ -44,6 +44,9 @@ export default class TodosList extends Component {
     }
 
     componentDidUpdate(prevProp, prevState) {
+        if(JSON.stringify(prevProp.loginState) !== JSON.stringify(this.props.loginState)){
+            this.setState({isLoggedIn:this.props.loginState})
+        }
         if(JSON.stringify(prevState.todos) !== JSON.stringify(this.state.todos)){
             axios.get('http://localhost:4000/todos/')
             .then(response => {
@@ -56,15 +59,10 @@ export default class TodosList extends Component {
     }
 
     todoList() {
-        if(this.state.isLoggedIn === true){
-            return this.state.todos.map(function(currentTodo, i) {
-                return <TodoEditor todo={currentTodo} key={i} />;
-            });
-        }else{
-            return this.state.todos.map(function(currentTodo, i) {
-                return <Todo todo={currentTodo} key={i} />;
-            });
-        }
+        let _this  = this;
+        return this.state.todos.map(function(currentTodo, i) {
+            return <TodoEditor loginState = {_this.state.isLoggedIn} todo={currentTodo} key={i} />;
+        })  
     }
 
     render() {

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route, Link, withRouter } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import CreateTodo from "./components/create-todo.component";
@@ -17,14 +17,27 @@ class App extends Component {
     this.state = {isLoggedIn:false};
 }
 
-updateLoggedInState(e){
-  console.log(e.target)
+updateLoggedInState = (e, prop) =>{
+  if(e){
+    //need to set a cookie for logged in state
+    this.setState({isLoggedIn: true});
+    prop.history.push("/")
+  }
 }
 
 MyLoginPage = (props) => {
   return (
     <Login 
       updateLoggedInState={this.updateLoggedInState.bind(this)}
+      {...props}
+    />
+  );
+}
+
+MyTodosList = (props) => {
+  return (
+    <TodosList 
+      loginState={this.state.isLoggedIn}
       {...props}
     />
   );
@@ -54,7 +67,7 @@ MyLoginPage = (props) => {
             </div>
           </nav>
 
-          <Route path="/" exact component={TodosList} />
+          <Route path="/" exact component={this.MyTodosList} />
           <Route path="/login" exact render={this.MyLoginPage} />
           <Route path="/edit/:id" component={EditTodo} />
           <Route path="/create" component={CreateTodo} />

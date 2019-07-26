@@ -45,11 +45,13 @@ mongTodos.on("open", function(arg){
 // })
 
 todoRoutes.route('/').get(function(req, res) {
-    Todo.find(function(err, todos) {
+    mongTodos.db.collection("todos").find({}, function(err, todos) {
         if (err) {
             console.log(err);
         } else {
-            res.json(todos);
+            todos.toArray().then((d) =>{
+                res.json(d)
+            });
         }
     });
 });
@@ -57,12 +59,9 @@ todoRoutes.route('/').get(function(req, res) {
 todoRoutes.route('/user/:un/:pw').post(function(req, res) {
     let un = req.params.un;
     let pw = req.params.pw;
-    let theUser = mongUser.db.collection("users").findOne({"username":"test"}).then((d) => {
-    
-        console.log(d)
+    let theUser = mongUser.db.collection("users").findOne({"username":un}).then((d) => {    
         res.send(d)
     });
-    // console.log(theDB.find({"username":"test"}))
    
 });
 
