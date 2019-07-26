@@ -21,13 +21,13 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "mongoStart": "cd backend && mongod",
+    "mongoStart": "cd backend && nohup mongod >> /mongo.log",
     "mongoConsole": "cd backend && mongo",
     "serverStart": "cd backend && nodemon server",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "runApp": "concurrently \"npm run start\" \"npm run mongoStart\" \"npm run mongoConsole\" \"npm run serverStart\""
+    "runApp": "concurrently \"pm2 start npm --run start\" \"npm run mongoStart\" \"npm run mongoConsole\" \"pm2 start npm --run serverStart\""
   },
   "eslintConfig": {
     "extends": "react-app"
