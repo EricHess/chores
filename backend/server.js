@@ -67,9 +67,21 @@ todoRoutes.route('/user/:un/:pw').post(function(req, res) {
 
 todoRoutes.route('/:id').get(function(req, res) {
     let id = req.params.id;
-    Todo.findById(id, function(err, todo) {
-        res.json(todo);
+    // console.log(id)
+    mongTodos.db.collection("todos").find({}, function(err, todos) {
+        if (err) {
+            console.log(err);
+        } else {
+            todos.toArray().then((d) =>{
+                for(let i=0;i<d.length;i++){
+                    if(d[i]._id == id){
+                        res.send(d[i])
+                    } 
+                }
+            });
+        }
     });
+
 });
 
 todoRoutes.route('/add').post(function(req, res) {
@@ -84,22 +96,45 @@ todoRoutes.route('/add').post(function(req, res) {
 });
 
 todoRoutes.route('/update/:id').post(function(req, res) {
-    Todo.findById(req.params.id, function(err, todo) {
-        if (!todo)
-            res.status(404).send('data is not found');
-        else
-            todo.todo_description = req.body.todo_description;
-            todo.todo_responsible = req.body.todo_responsible;
-            todo.todo_priority = req.body.todo_priority;
-            todo.todo_completed = req.body.todo_completed;
+    // Todo.findById(req.params.id, function(err, todo) {
+    mongTodos.db.collection("todos").find({}, function(err, todos){
+        if (err) {
+            console.log(err);
+        } else {
+            todos.toArray().then((d) =>{
+                for(let i=0;i<d.length;i++){
+                    if(d[i]._id == req.params.id){
+                        let newId = new mongoose.mongo.ObjectID(req.params.id)
 
-            todo.save().then(todo => {
-                res.json('Todo updated');
-            })
-            .catch(err => {
-                res.status(400).send("Update not possible");
+                        d[i].todo_description = req.body.todo_description;
+                        d[i].todo_responsible = req.body.todo_responsible;
+                        d[i].todo_priority = req.body.todo_priority;
+                        d[i].todo_completed = req.body.todo_completed;
+
+
+                        
+                        mongTodos.db.collection("todos").findOneAndUpdate(
+                            {_id: newId}, 
+                            {$set: 
+                                {
+                                    "todo_description" : d[i].todo_description,
+                                    "todo_responsible" : d[i].todo_responsible,
+                                    "todo_priority" : d[i].todo_priority,
+                                    "todo_completed" : d[i].todo_completed
+                                }
+                            }, {upsert:true}).then(todoUpdate => {
+                            res.json("updated")                       
+                        })
+                        .catch(err =>{
+                            console.log(err)
+                        })
+                        
+
+                    } 
+                }
             });
-    });
+        }
+    })    
 });
 
 app.use('/todos', todoRoutes);
