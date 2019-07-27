@@ -14,14 +14,16 @@ class App extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {isLoggedIn:false};
+    this.state = {isLoggedIn:localStorage.getItem("loggedInState") || false};
 }
 
 updateLoggedInState = (e, prop) =>{
   if(e){
     //need to set a cookie for logged in state
     this.setState({isLoggedIn: true});
+    localStorage.setItem("loggedInState", true)
     prop.history.push("/")
+    //NEED TO NOW CREATE A LOG OUT BUTTON SO THAT THE LOCAL STORAGE DOES NOT PERSIST
   }
 }
 
