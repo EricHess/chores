@@ -86,13 +86,13 @@ todoRoutes.route('/:id').get(function(req, res) {
 
 todoRoutes.route('/add').post(function(req, res) {
     let todo = new Todo(req.body);
-    todo.save()
-        .then(todo => {
-            res.status(200).json({'todo': 'todo added successfully'});
-        })
-        .catch(err => {
-            res.status(400).send('adding new todo failed');
-        });
+    console.log(todo)
+    mongTodos.db.collection("todos").insertOne(todo).then((d) =>{
+        console.log(d)
+    })
+    .catch(err =>{
+        res.status(400).send("Adding New Todo Failed")
+    });
 });
 
 todoRoutes.route('/update/:id').post(function(req, res) {
