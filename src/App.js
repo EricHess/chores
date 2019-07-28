@@ -27,6 +27,15 @@ updateLoggedInState = (e, prop) =>{
   }
 }
 
+ChangeLoginStatus = () =>{
+  if(this.state.isLoggedIn == "true"){
+    localStorage.removeItem("loggedInState");
+    this.setState({isLoggedIn:false}) 
+  }else{
+    window.history.pushState(null,"Log In","/login")
+  }
+}
+
 MyLoginPage = (props) => {
   return (
     <Login 
@@ -64,6 +73,10 @@ MyTodosList = (props) => {
                 </li>
                 <li className="navbar-item">
                   <Link to="/create" className="nav-link">Create Todo</Link>
+                </li>
+
+                <li className="navbar-item">
+                  <a className="nav-link" href="#" onClick={this.ChangeLoginStatus}>{this.state.isLoggedIn ? "Logout" : "Login"}</a>
                 </li>
               </ul>
             </div>
