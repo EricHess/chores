@@ -17,6 +17,10 @@ export default class ClearAllButton extends Component {
     }
 
     sendDeleteCommandToMongo() {
+        axios.post('http://127.0.0.1:4000/todos/clearAll')
+        .then(response => {
+            return response;
+        })
         
     }
 

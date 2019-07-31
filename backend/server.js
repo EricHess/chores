@@ -10,8 +10,8 @@ let Todo = require('./todo.model');
 let User = require('./user.model');
 
 app.use(cors());
-app.use(bodyParser.json());
-
+app.use(bodyParser.json()); 
+ 
 
 
 
@@ -83,7 +83,7 @@ todoRoutes.route('/:id').get(function(req, res) {
     });
 
 });
-
+ 
 todoRoutes.route('/add').post(function(req, res) {
     let todo = new Todo(req.body);
     console.log(todo)
@@ -93,6 +93,30 @@ todoRoutes.route('/add').post(function(req, res) {
     .catch(err =>{
         res.status(400).send("Adding New Todo Failed")
     });
+});
+
+todoRoutes.route('/clearAll').post(function(req, res) {
+    let completedToDos = mongTodos.db.collection("todos").find({"todo_completed": true});
+    let newvalues = {$set: {"todo_completed":false}};
+
+    completedToDos.toArray().then((d) =>{
+        for(let i=0;i<d.length;i++){
+            let theTodo = d[i];
+            let objectifiedID = new mongoose.mongo.ObjectID(d[i]._id)
+            mongTodos.db.collection("todos").findOneAndUpdate(
+                {_id: objectifiedID},
+                newvalues, {upsert:true}
+            ).then(uncompleteUpdate =>{
+                console.log('updated')
+            })
+            .catch(err =>{
+                console.log(err)
+            })
+        }
+    })
+    res.send("completed")
+   
+
 });
 
 todoRoutes.route('/update/:id').post(function(req, res) {
