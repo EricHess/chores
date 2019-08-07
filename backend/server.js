@@ -45,15 +45,31 @@ mongTodos.on("open", function(arg){
 // })
 
 todoRoutes.route('/').get(function(req, res) {
+    let assignedName=req.query.name || "";
+    let outputResponse = [];
+
     mongTodos.db.collection("todos").find({}, function(err, todos) {
         if (err) {
             console.log(err);
         } else {
-            todos.toArray().then((d) =>{
-                res.json(d)
-            });
+            todos.toArray().then((data) =>{
+                let objValues = Object.values(data);
+                for(let i=0;i<objValues.length;i++){
+                    let responsibleCheck = objValues[i].todo_responsible;
+                    if(responsibleCheck.toLowerCase().indexOf(assignedName.toLowerCase()) > -1 ){
+                        outputResponse.push(objValues[i]);
+                    }
+                }
+                res.json(outputResponse)
+            })
+            .catch(err =>{
+                console.log(err)
+            })
         }
     });
+
+
+
 });
 
 todoRoutes.route('/user/:un/:pw').post(function(req, res) {

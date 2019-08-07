@@ -47,10 +47,26 @@ MyLoginPage = (props) => {
 
 MyTodosList = (props) => {
   return (
+    <section>
     <TodosList 
+      listOut="Ava"
       loginState={this.state.isLoggedIn}
       {...props}
     />
+
+    <TodosList 
+    listOut="Reagan"
+    loginState={this.state.isLoggedIn}
+    {...props}
+  />
+
+  <TodosList 
+  listOut="Noelle"
+  loginState={this.state.isLoggedIn}
+  {...props}
+/>
+
+</section>
   );
 }
 

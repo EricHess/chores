@@ -34,7 +34,7 @@ export default class TodosList extends Component {
     }
 
     componentDidMount() {
-        axios.get('http://3.17.85.124:4000/todos/')
+        axios.get('http://localhost:4000/todos/',{params:{name:this.props.listOut}})
             .then(response => {
                 this.setState({todos: response.data});
             })
@@ -48,7 +48,7 @@ export default class TodosList extends Component {
             this.setState({isLoggedIn:this.props.loginState})
         }
         if(JSON.stringify(prevState.todos) !== JSON.stringify(this.state.todos)){
-            axios.get('http://3.17.85.124:4000/todos/')
+            axios.get('http://localhost:4000/todos/',{params:{name:this.props.listOut}})
             .then(response => {
                 this.setState({todos: response.data});
             })
@@ -68,7 +68,7 @@ export default class TodosList extends Component {
     render() {
         return (
             <div>
-                <h3>Todos List</h3>
+                <h3>{this.props.listOut} Todos List</h3>
                 <table className="table table-striped" style={{ marginTop: 20 }}>
                     <thead>
                         <tr>
