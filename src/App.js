@@ -14,7 +14,7 @@ class App extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {isLoggedIn:localStorage.getItem("loggedInState") || false};
+    this.state = {usersOfApp:["All", "Ava", "Reagan", "Noelle"],isLoggedIn:localStorage.getItem("loggedInState") || false};
 }
 
 updateLoggedInState = (e, prop) =>{
@@ -46,33 +46,12 @@ MyLoginPage = (props) => {
 }
 
 MyTodosList = (props) => {
+  let _this = this;
   return (
-    <section>
-    <TodosList 
-      listOut="Ava"
-      loginState={this.state.isLoggedIn}
-      {...props}
-    />
-
-    <TodosList 
-    listOut="Reagan"
-    loginState={this.state.isLoggedIn}
-    {...props}
-  />
-
-  <TodosList 
-  listOut="Noelle"
-  loginState={this.state.isLoggedIn}
-  {...props}
-/>
-  <TodosList 
-  listOut="All"
-  loginState={this.state.isLoggedIn}
-  {...props}
-/>
-
-</section>
-  );
+      this.state.usersOfApp.map(function(currentUser, i) {
+        return <TodosList loginState = {_this.state.isLoggedIn} listOut={currentUser} key={i} />;
+      })  
+    )  
 }
 
 
