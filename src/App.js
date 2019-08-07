@@ -65,6 +65,11 @@ MyTodosList = (props) => {
   loginState={this.state.isLoggedIn}
   {...props}
 />
+  <TodosList 
+  listOut="All"
+  loginState={this.state.isLoggedIn}
+  {...props}
+/>
 
 </section>
   );

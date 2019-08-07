@@ -53,6 +53,8 @@ todoRoutes.route('/').get(function(req, res) {
             console.log(err);
         } else {
             todos.toArray().then((data) =>{
+                if(assignedName.toLowerCase() === "all"){ res.json(data) }
+
                 let objValues = Object.values(data);
                 for(let i=0;i<objValues.length;i++){
                     let responsibleCheck = objValues[i].todo_responsible;
