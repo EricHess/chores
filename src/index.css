@@ -16,3 +16,20 @@ code {
 .completed {
   text-decoration: line-through;
 }
+
+
+#root .container{
+  max-width:100%;
+  display:flex;
+  flex-wrap:wrap;
+}
+
+.navbar{
+  flex-basis:100%;
+}
+
+article.todoList {
+  flex-grow: 1;
+  padding: 30px;
+  max-width: 33%
+}

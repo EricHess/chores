@@ -9,12 +9,14 @@ import Login from "./components/login.component";
 
 import logo from "./logo.png";
 
+
+
 class App extends Component {
 
 
   constructor(props) {
     super(props);
-    this.state = {usersOfApp:["All", "Ava", "Reagan", "Noelle"],isLoggedIn:localStorage.getItem("loggedInState") || false};
+    this.state = {usersOfApp:["Ava", "Reagan", "Noelle"],isLoggedIn:localStorage.getItem("loggedInState") || false};
 }
 
 updateLoggedInState = (e, prop) =>{
@@ -49,7 +51,7 @@ MyTodosList = (props) => {
   let _this = this;
   return (
       this.state.usersOfApp.map(function(currentUser, i) {
-        return <TodosList loginState = {_this.state.isLoggedIn} listOut={currentUser} key={i} />;
+        return <article data-name={currentUser} className="todoList"><TodosList loginState = {_this.state.isLoggedIn} listOut={currentUser} key={i} /></article>;
       })  
     )  
 }
