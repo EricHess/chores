@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import ClearAllButton from "./clear-all-button.component"
-import SubmitChores from "./submit-the-list.component"
+import { COPYFILE_FICLONE_FORCE } from 'constants';
 
 const Todo = props => (
     <tr>
@@ -21,7 +20,8 @@ const TodoEditor = props => (
         <td className={props.todo.todo_completed ? 'completed' : ''}>{props.todo.todo_responsible}</td>
         <td className={props.todo.todo_completed ? 'completed' : ''}>{props.todo.todo_priority}</td>
         <td>
-            <Link to={props.loginState ? "/edit/"+props.todo._id : "/login"}>{props.loginState ? "Edit" : "Log In"}</Link>
+            <Link to={props.loginState ? "/edit/"+props.todo._id : "/login"}>{props.loginState ? "Edit " : "Log In "}</Link>
+            <a href="#" data-complete-id={props.todo._id} onClick={(e) =>{props.completeMe(e, props)}}>Complete</a>
         </td>
     </tr>
 )
@@ -58,11 +58,26 @@ export default class TodosList extends Component {
         }
     }
 
+    complete = (e, props) =>{
+        let completeID = e.target.getAttribute("data-complete-id");
+        axios.post('http://localhost:4000/todos/complete/'+completeID)
+        .then(response =>{
+            
+        })
+        .catch = (err) =>{
+            console.log(err)
+        }
+        props.todo.todo_completed=true
+    }
+
+
     todoList() {
         let _this  = this;
         return this.state.todos.map(function(currentTodo, i) {
-            return <TodoEditor loginState = {_this.state.isLoggedIn} todo={currentTodo} key={i} />;
+            return <TodoEditor completeMe= {_this.complete} loginState = {_this.state.isLoggedIn} todo={currentTodo} key={i} />;
         })  
+
+
     }
 
     render() {
@@ -83,10 +98,7 @@ export default class TodosList extends Component {
                     </tbody>
 
                 </table>
-                <aside class="buttonRow">
-                    <ClearAllButton></ClearAllButton>
-                    <SubmitChores></SubmitChores>
-                </aside>
+
             </div>
 
         )

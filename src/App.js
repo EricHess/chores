@@ -9,6 +9,9 @@ import Login from "./components/login.component";
 
 import logo from "./logo.png";
 
+import ClearAllButton from "./components/clear-all-button.component"
+import SubmitChores from "./components/submit-the-list.component"
+
 
 
 class App extends Component {
@@ -16,7 +19,7 @@ class App extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {usersOfApp:["Ava", "Reagan", "Noelle"],isLoggedIn:localStorage.getItem("loggedInState") || false};
+    this.state = {usersOfApp:["Ava", "Reagan", "Noelle", "All"],isLoggedIn:localStorage.getItem("loggedInState") || false};
 }
 
 updateLoggedInState = (e, prop) =>{
@@ -88,6 +91,11 @@ MyTodosList = (props) => {
           <Route path="/login" exact render={this.MyLoginPage} />
           <Route path="/edit/:id" component={EditTodo} />
           <Route path="/create" component={CreateTodo} />
+
+          <aside class="buttonRow">
+                    <ClearAllButton></ClearAllButton>
+                    <SubmitChores></SubmitChores>
+                </aside>
 
         </div>
       </Router>

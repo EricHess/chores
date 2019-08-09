@@ -54,7 +54,7 @@ todoRoutes.route('/').get(function(req, res) {
         } else {
             todos.toArray().then((data) =>{
                 if(assignedName.toLowerCase() === "all"){ res.json(data) }
-
+                else{
                 let objValues = Object.values(data);
                 for(let i=0;i<objValues.length;i++){
                     let responsibleCheck = objValues[i].todo_responsible;
@@ -63,6 +63,7 @@ todoRoutes.route('/').get(function(req, res) {
                     }
                 }
                 res.json(outputResponse)
+            }
             })
             .catch(err =>{
                 console.log(err)
@@ -99,7 +100,6 @@ todoRoutes.route('/:id').get(function(req, res) {
             });
         }
     });
-
 });
  
 todoRoutes.route('/add').post(function(req, res) {
@@ -133,8 +133,6 @@ todoRoutes.route('/clearAll').post(function(req, res) {
         }
     })
     res.send("completed")
-   
-
 });
 
 todoRoutes.route('/update/:id').post(function(req, res) {
@@ -177,6 +175,39 @@ todoRoutes.route('/update/:id').post(function(req, res) {
             });
         }
     })    
+});
+
+
+todoRoutes.route('/complete/:id').post(function(req, res) {
+    // Todo.findById(req.params.id, function(err, todo) {
+    mongTodos.db.collection("todos").find({}, function(err, todos){
+        if (err) {
+            console.log(err);
+        } else { 
+            todos.toArray().then((d) =>{
+                for(let i=0;i<d.length;i++){
+                    if(d[i]._id == req.params.id){
+                        let newId = new mongoose.mongo.ObjectID(req.params.id)
+                        mongTodos.db.collection("todos").findOneAndUpdate(
+                            {_id: newId}, 
+                            {$set: 
+                                {
+                                    "todo_completed" : true
+                                }
+                            }, {upsert:true}).then(todoUpdate => {
+                            res.json(todoUpdate)                  
+                        })
+                        .catch(err =>{
+                            console.log(err)
+                        })
+                        
+
+                    } 
+                }
+            });
+        }
+    })    
+
 });
 
 app.use('/todos', todoRoutes);
