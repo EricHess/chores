@@ -19,7 +19,7 @@ class App extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {usersOfApp:["Ava", "Reagan", "Noelle", "All"],isLoggedIn:localStorage.getItem("loggedInState") || false};
+    this.state = {usersOfApp:["Ava", "Reagan", "Noelle", "All"],isLoggedIn:localStorage.getItem("loggedInState") || false, recentlyChanged:false};
 }
 
 updateLoggedInState = (e, prop) =>{
@@ -41,6 +41,12 @@ ChangeLoginStatus = () =>{
   }
 }
 
+UpdateClearedTodos = () =>{
+  let newDate = new Date();
+  let newTS = newDate.getTime();
+  this.setState({recentlyChanged:true+newTS})
+}
+
 MyLoginPage = (props) => {
   return (
     <Login 
@@ -54,7 +60,7 @@ MyTodosList = (props) => {
   let _this = this;
   return (
       this.state.usersOfApp.map(function(currentUser, i) {
-        return <article data-name={currentUser} className="todoList"><TodosList loginState = {_this.state.isLoggedIn} listOut={currentUser} key={i} /></article>;
+        return <article data-name={currentUser} className="todoList"><TodosList tryThis = {_this.state.recentlyChanged} loginState = {_this.state.isLoggedIn} listOut={currentUser} key={i} /></article>;
       })  
     )  
 }
@@ -93,7 +99,7 @@ MyTodosList = (props) => {
           <Route path="/create" component={CreateTodo} />
 
           <aside class="buttonRow">
-                    <ClearAllButton></ClearAllButton>
+                    <ClearAllButton refreshTrigger = {this.UpdateClearedTodos}></ClearAllButton>
                     <SubmitChores></SubmitChores>
                 </aside>
 

@@ -3,6 +3,14 @@ import axios from 'axios';
 
 export default class ClearAllButton extends Component {
 
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            changedNow:false
+        }
+    }
+
     bringUpConfirmationBox() {
         let clearPassword = prompt("Please enter the clear password", "");
         let txt;
@@ -19,6 +27,7 @@ export default class ClearAllButton extends Component {
     sendDeleteCommandToMongo() {
         axios.post('http://127.0.0.1:4000/todos/clearAll')
         .then(response => {
+            this.props.refreshTrigger();
             return response;
         })
         

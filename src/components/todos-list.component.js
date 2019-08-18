@@ -62,7 +62,7 @@ export default class TodosList extends Component {
         if(JSON.stringify(prevProp.loginState) !== JSON.stringify(this.props.loginState)){
             this.setState({isLoggedIn:this.props.loginState})
         }
-        if(JSON.stringify(prevState.todos) !== JSON.stringify(this.state.todos)){
+        if((JSON.stringify(prevState.todos) !== JSON.stringify(this.state.todos) || JSON.stringify(prevProp) !== JSON.stringify(this.props))){
             axios.get('http://localhost:4000/todos/',{params:{name:this.props.listOut}})
             .then(response => {
                 this.setState({todos: response.data});
